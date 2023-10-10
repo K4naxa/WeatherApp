@@ -17,6 +17,10 @@ class RenderManagment {
     locationText.innerText = weather.location + ", " + weather.country;
     informationUpdateTime.innerText = weather.lastUpdated;
 
+    locationInfoContainer.classList.add("searchInfoContainer");
+    locationText.classList.add("weatherLocation");
+    informationUpdateTime.classList.add("weatherTimingInfo");
+
     DOMMainContainer.appendChild(locationInfoContainer);
     locationInfoContainer.appendChild(locationText);
     locationInfoContainer.appendChild(informationUpdateTime);

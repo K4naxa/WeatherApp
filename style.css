@@ -15,8 +15,9 @@ body {
   width: 100%;
   display: inherit;
   align-items: center;
-  justify-content:space-between ;
+  justify-content: space-between;
   margin: 1rem;
+  margin-bottom: 3rem;
 
   & .logo {
     justify-self: start;
@@ -53,16 +54,18 @@ body {
         cursor: pointer;
         border: 2px solid white;
       }
-      &::after
     }
   }
 }
 
 #mainContainer {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: repeat(3, minmax(min-content, max-content));
 
   & .searchInfoContainer {
+    grid-row: 1;
+    grid-column: 1/100%;
     display: flex;
     flex-direction: column;
     align-items: center;
