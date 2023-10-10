@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <title>WeatherApp</title>
+  </head>
+  <body>
+    <div id="header">
+      <div class="logo">WeatherApp</div>
+      <div class="searchBar">
+        <input
+          type="text"
+          name="locationSearchBar"
+          id="locationSearchBar"
+          placeholder="Search Location"
+          maxlength="10"
+          minlength="1"
+        />
+      </div>
+      <div class="settingsContainer">
+        <div class="celsiusButton">°C, m/s</div>
+        <div class="farenheitBtn">°F, mph</div>
+      </div>
+    </div>
+    <div id="mainContainer">
+      <div class="searchInfoContainer">
+        <h3 class="weatherLocation">Helsinki, Finland</h3>
+        <span class="weatherTimingInfo"
+          >tiistai 10 tammikuuta 2023 | 12:30</span
+        >
+      </div>
+      <div class="weatherInfoContainer">
+        <div class="weatherMainInfo"></div>
+        <div class="weatherSpecificInfo"></div>
+      </div>
+    </div>
+  </body>
+</html>

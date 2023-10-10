@@ -1,0 +1,77 @@
+html {
+  height: 100vh;
+  background: linear-gradient(rgb(0, 206, 206), rgb(0, 109, 109));
+  font-size: 1.4rem;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#header {
+  width: 100vw;
+  display: inherit;
+  align-items: center;
+  justify-content:space-between ;
+  margin: 1rem;
+
+  & .logo {
+    justify-self: start;
+  }
+
+  & #locationSearchBar {
+    justify-self: center;
+    font-size: inherit;
+    background-color: #0e2d44;
+    border: 0;
+    border-radius: 20px;
+    padding: 0.3rem;
+    color: inherit;
+  }
+
+  & .settingsContainer {
+    display: flex;
+    justify-self: end;
+
+    gap: 10px;
+
+    & div {
+      background-color: #0e2d44;
+      padding: 0.2rem;
+      border-radius: 20px;
+      border: 2px solid #0e2d44;
+
+      font-size: 0.8rem;
+
+      &:hover {
+        cursor: pointer;
+        border: 2px solid white;
+      }
+      &::after
+    }
+  }
+}
+
+#mainContainer {
+  display: flex;
+  flex-direction: column;
+
+  & .searchInfoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & .weatherLocation {
+      font-size: 2rem;
+      padding-bottom: 0;
+      margin-bottom: 0.6rem;
+    }
+
+    & .weatherTimingInfo {
+      opacity: 70%;
+    }
+  }
+}
