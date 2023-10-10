@@ -7,14 +7,15 @@ const DOMMainContainer = document.getElementById("mainContainer");
 // Class to manage all DOM rendering
 class RenderManagment {
   renderLocationData() {
-    const weatherData = weatherManager.weatherData;
+    const weather = weatherManager.Weather;
+    console.log(weather);
 
     const locationInfoContainer = document.createElement("div");
     const locationText = document.createElement("h3");
     const informationUpdateTime = document.createElement("span");
 
-    locationText.innerText = weatherData.location + ", " + weatherData.country;
-    informationUpdateTime.innerText = weatherData.lastUpdated;
+    locationText.innerText = weather.location + ", " + weather.country;
+    informationUpdateTime.innerText = weather.lastUpdated;
 
     DOMMainContainer.appendChild(locationInfoContainer);
     locationInfoContainer.appendChild(locationText);
@@ -33,6 +34,23 @@ const renderManager = new RenderManagment();
 class WeatherManagment {
   constructor() {
     this.weatherData = this.updateWeatherData("helsinki");
+    this.Weather = {
+      location: "",
+      country: "",
+      temp_c: 0,
+      temp_f: Infinity,
+      feelsLike_c: Infinity,
+      feelsLike_f: Infinity,
+      conditionText: "",
+      conditionIcon: "",
+      UV: Infinity,
+      vis_km: Infinity,
+      vis_miles: Infinity,
+      wind_kph: Infinity,
+      wind_mph: Infinity,
+      humidity: Infinity,
+      lastUpdated: "",
+    };
   }
 
   // Forwards the inputted search location to renderWeatherData function and cleans the searchbar
@@ -46,49 +64,31 @@ class WeatherManagment {
   }
 
   async updateWeatherData(searchLocation) {
-    this.weatherData = await this.fetchWeatherData(searchLocation);
-    const weatherData = this.weatherData;
+    const weatherData = await this.fetchWeatherData(searchLocation);
+    console.log(weatherData.current.temp_c);
 
-    const location = weatherData.location.name;
-    const country = weatherData.location.country;
+    this.Weather.location = weatherData.location.name;
+    this.Weather.country = weatherData.location.country;
 
-    const temp_c = weatherData.current.temp_c;
-    const temp_f = weatherData.current.temp_f;
-    const feelsLike_c = weatherData.current.feelslike_c;
-    const feelsLike_f = weatherData.current.feelslike_f;
+    this.Weather.temp_c = weatherData.current.temp_c;
+    this.Weather.temp_f = weatherData.current.temp_f;
+    this.Weather.feelsLike_c = weatherData.current.feelslike_c;
+    this.Weather.feelsLike_f = weatherData.current.feelslike_f;
 
-    const conditionText = weatherData.current.condition.text;
-    const conditionIcon = weatherData.current.condition.icon;
+    this.Weather.conditionText = weatherData.current.condition.text;
+    this.Weather.conditionIcon = weatherData.current.condition.icon;
 
-    const UV = weatherData.current.uv;
+    this.Weather.UV = weatherData.current.uv;
 
-    const vis_km = weatherData.current.vis_km;
-    const vis_miles = weatherData.current.vis_miles;
+    this.Weather.vis_km = weatherData.current.vis_km;
+    this.Weather.vis_miles = weatherData.current.vis_miles;
 
-    const wind_kph = weatherData.current.wind_kph;
-    const wind_mph = weatherData.current.wind_mph;
+    this.Weather.wind_kph = weatherData.current.wind_kph;
+    this.Weather.wind_mph = weatherData.current.wind_mph;
 
-    const humidity = weatherData.current.humidity;
+    this.Weather.humidity = weatherData.current.humidity;
 
-    const lastUpdated = weatherData.current.last_updated;
-
-    this.weatherData = [
-      location,
-      country,
-      temp_c,
-      temp_f,
-      feelsLike_c,
-      feelsLike_f,
-      conditionText,
-      conditionIcon,
-      UV,
-      vis_km,
-      vis_miles,
-      wind_kph,
-      wind_mph,
-      humidity,
-      lastUpdated,
-    ];
+    this.Weather.lastUpdated = weatherData.current.last_updated;
   }
 
   // Gets the weather data from the API and returns it
