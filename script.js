@@ -6,9 +6,11 @@ const DOMMainContainer = document.getElementById("mainContainer");
 
 // Class to manage all DOM rendering
 class RenderManagment {
+  constructor() {
+    this.showInCelsius = true;
+  }
   renderLocationData() {
     const weather = weatherManager.Weather;
-    console.log(weather);
 
     const locationInfoContainer = document.createElement("div");
     const locationText = document.createElement("h3");
@@ -25,11 +27,49 @@ class RenderManagment {
     locationInfoContainer.appendChild(locationText);
     locationInfoContainer.appendChild(informationUpdateTime);
   }
+  renderWeatherInfo() {
+    const weather = weatherManager.Weather;
+
+    const weatherInfoContainer = document.createElement("div");
+    const temperatureWindow = document.createElement("div");
+    const lowerTemperatureWindow = document.createElement("div");
+    const conditionText = document.createElement("span");
+    const feelsLikeText = document.createElement("span");
+    const temperatureWindowImg = document.createElement("img");
+    const temperatureWindowTemp = document.createElement("h1");
+
+    weatherInfoContainer.classList.add("weatherInfoContainer");
+    temperatureWindow.classList.add("temperatureWindow");
+    lowerTemperatureWindow.classList.add("lowerTemperatureWindow");
+    conditionText.classList.add("conditionText");
+    feelsLikeText.classList.add("feelsLikeText");
+
+    DOMMainContainer.appendChild(weatherInfoContainer);
+    weatherInfoContainer.appendChild(temperatureWindow);
+    temperatureWindow.appendChild(temperatureWindowImg);
+    temperatureWindow.appendChild(temperatureWindowTemp);
+    weatherInfoContainer.appendChild(lowerTemperatureWindow);
+    lowerTemperatureWindow.appendChild(conditionText);
+    lowerTemperatureWindow.appendChild(feelsLikeText);
+
+    // Decide wether to show in Celcius or Farenheit
+    if (this.showInCelsius === true) {
+      temperatureWindowTemp.innerText = weather.temp_c + "°C";
+      feelsLikeText.innerText = "Feels like " + weather.feelsLike_c + "°C";
+    } else {
+      temperatureWindowTemp.innerText = weather.temp_f + "°F";
+      feelsLikeText.innerText = "Feels like " + weather.feelsLike_f + "°F";
+    }
+
+    temperatureWindowImg.src = weather.conditionIcon;
+    conditionText.innerText = weather.conditionText;
+  }
 
   // Render all weather information
   async renderWeatherData() {
     DOMMainContainer.innerHTML = "";
     this.renderLocationData();
+    this.renderWeatherInfo();
   }
 }
 const renderManager = new RenderManagment();
