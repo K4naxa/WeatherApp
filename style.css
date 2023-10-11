@@ -1,6 +1,7 @@
 html {
-  height: 100vh;
-  background: linear-gradient(rgb(0, 206, 206), rgb(0, 109, 109));
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(rgb(28, 98, 202), rgb(0, 119, 119));
   font-size: 1.4rem;
   font-family: Arial, Helvetica, sans-serif;
   color: white;
@@ -13,19 +14,21 @@ body {
 
 #header {
   width: 100%;
-  display: inherit;
+  display: grid;
   align-items: center;
-  justify-content: space-between;
-  margin: 1rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1fr 360px 1fr;
+  grid-template-areas: "logo searchbar settings";
 
   & .logo {
-    justify-self: start;
-    margin-left: 1rem;
+    grid-area: logo;
   }
 
+  & .searchBar {
+    grid-area: searchbar;
+    display: flex;
+    justify-content: center;
+  }
   & #locationSearchBar {
-    justify-self: center;
     font-size: inherit;
     background-color: #0e2d44;
     border: 0;
@@ -36,8 +39,10 @@ body {
   }
 
   & .settingsContainer {
-    display: flex;
+    grid-area: settings;
     justify-self: end;
+
+    display: flex;
     margin-right: 1rem;
 
     gap: 10px;
@@ -61,12 +66,14 @@ body {
 #mainContainer {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: repeat(3, minmax(min-content, max-content));
+  grid-template-rows: repeat(4, minmax(min-content, max-content));
   gap: 2rem;
+  max-width: 720px;
 
   grid-template-areas:
     "title title"
     "weather details"
+    "hourly hourly"
     "daily daily";
 
   & .searchInfoContainer {
@@ -132,5 +139,60 @@ body {
     & .details-data {
       font-size: 1.2rem;
     }
+  }
+}
+
+.hourlyCarouselContainer {
+  grid-area: hourly;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  & .carouselTitle {
+    align-self: center;
+    font-size: 1.6rem;
+  }
+  & .hourlyCarousel {
+    display: flex;
+    overflow-x: scroll;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+
+    & .hourlyDetailsCard {
+      display: flex;
+      flex-direction: column;
+      min-width: 160px;
+      padding: 0.3rem;
+      border: rgba(14, 45, 68, 0.3) solid 1px;
+      box-shadow: 2px 4px 10px rgba(7, 7, 65, 05);
+      border-radius: 5px;
+
+      & .title {
+        align-self: center;
+      }
+    }
+  }
+
+  ::-webkit-scrollbar {
+    height: 0.5rem;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(12, 245, 233, 0.281);
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(5, 97, 172, 0.904);
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 }

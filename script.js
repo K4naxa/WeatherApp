@@ -99,7 +99,7 @@ class RenderManagment {
 
   // Render all weather information
   async renderWeatherData() {
-    DOMMainContainer.innerHTML = "";
+    // DOMMainContainer.innerHTML = "";
     this.renderLocationData();
     this.renderWeatherInfo();
     this.renderWeatherDetails();
@@ -174,10 +174,13 @@ class WeatherManagment {
   // Gets the weather data from the API and returns it
   async fetchWeatherData(input) {
     let solution = await fetch(
-      `http://api.weatherapi.com/v1/current.json?key=7d6ccec9f9824320846142016230910&q=${input}&aqi=no`,
+      //   `http://api.weatherapi.com/v1/current.json?key=7d6ccec9f9824320846142016230910&q=${input}&aqi=no`,
+      `http://api.weatherapi.com/v1/forecast.json?key=7d6ccec9f9824320846142016230910&q=${input}&days=7&aqi=no&alerts=no`,
       { mode: "cors" }
-    );
-    const weatherData = solution.json();
+    ).catch((message) => {
+      console.error(message);
+    });
+    const weatherData = await solution.json();
     return weatherData;
   }
 }
@@ -190,3 +193,6 @@ locationSearchBar.addEventListener("keypress", (e) => {
     e.target.value = "";
   }
 });
+
+// RUN ON STARTUP
+weatherManager.weatherSearchActivation("Helsinki");
