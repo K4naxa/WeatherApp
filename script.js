@@ -27,6 +27,38 @@ class RenderManagment {
     locationInfoContainer.appendChild(locationText);
     locationInfoContainer.appendChild(informationUpdateTime);
   }
+  renderWeatherDetails() {
+    let weatherDetails;
+
+    // Checks wether we show in celcius or farenheit
+    if (this.showInCelsius === true) {
+      weatherDetails = weatherManager.weatherDetailsCelsius;
+    } else {
+      weatherDetails = weatherManager.weatherDetailsFarenheit;
+    }
+
+    const weatherDetailsGrid = document.createElement("div");
+    weatherDetailsGrid.classList.add("weatherDetails");
+    DOMMainContainer.appendChild(weatherDetailsGrid);
+
+    // iterates through every value in weatherDetails and creates a div for it
+    for (const [key, value] of Object.entries(weatherDetails)) {
+      const detailsDiv = document.createElement("div");
+      detailsDiv.classList.add("details");
+
+      const detailsTitle = document.createElement("div");
+      detailsTitle.classList.add("detailsTitle");
+      detailsTitle.innerText = key;
+
+      const detailsData = document.createElement("div");
+      detailsData.classList.add("detailsData");
+      detailsData.innerText = value;
+
+      weatherDetailsGrid.appendChild(detailsDiv);
+      detailsDiv.appendChild(detailsTitle);
+      detailsDiv.appendChild(detailsData);
+    }
+  }
   renderWeatherInfo() {
     const weather = weatherManager.Weather;
 
@@ -70,6 +102,7 @@ class RenderManagment {
     DOMMainContainer.innerHTML = "";
     this.renderLocationData();
     this.renderWeatherInfo();
+    this.renderWeatherDetails();
   }
 }
 const renderManager = new RenderManagment();
@@ -87,29 +120,30 @@ class WeatherManagment {
       feelsLike_f: Infinity,
       conditionText: "",
       conditionIcon: "",
-      UV: Infinity,
-      vis_km: Infinity,
-      vis_miles: Infinity,
-      wind_kph: Infinity,
-      wind_mph: Infinity,
-      humidity: Infinity,
       lastUpdated: "",
+    };
+    this.weatherDetailsCelsius = {
+      wind_kph: Infinity,
+      vis_km: Infinity,
+      humidity: Infinity,
+      UV: Infinity,
+    };
+    this.weatherDetailsFarenheit = {
+      wind_mph: Infinity,
+      vis_miles: Infinity,
+      humidity: Infinity,
+      UV: Infinity,
     };
   }
 
   // Forwards the inputted search location to renderWeatherData function and cleans the searchbar
-  weatherSearchActivation(e) {
-    if (e.key === "Enter") {
-      const value = e.target.value;
-      e.target.value = "";
-      this.updateWeatherData(value);
-      renderManager.renderWeatherData();
-    }
+  async weatherSearchActivation(searchLocation) {
+    await this.updateWeatherData(searchLocation);
+    await renderManager.renderWeatherData();
   }
 
   async updateWeatherData(searchLocation) {
     const weatherData = await this.fetchWeatherData(searchLocation);
-    console.log(weatherData.current.temp_c);
 
     this.Weather.location = weatherData.location.name;
     this.Weather.country = weatherData.location.country;
@@ -122,15 +156,17 @@ class WeatherManagment {
     this.Weather.conditionText = weatherData.current.condition.text;
     this.Weather.conditionIcon = weatherData.current.condition.icon;
 
-    this.Weather.UV = weatherData.current.uv;
+    this.weatherDetailsFarenheit.UV = weatherData.current.uv;
+    this.weatherDetailsCelsius.UV = weatherData.current.uv;
 
-    this.Weather.vis_km = weatherData.current.vis_km;
-    this.Weather.vis_miles = weatherData.current.vis_miles;
+    this.weatherDetailsCelsius.vis_km = weatherData.current.vis_km;
+    this.weatherDetailsFarenheit.vis_miles = weatherData.current.vis_miles;
 
-    this.Weather.wind_kph = weatherData.current.wind_kph;
-    this.Weather.wind_mph = weatherData.current.wind_mph;
+    this.weatherDetailsCelsius.wind_kph = weatherData.current.wind_kph;
+    this.weatherDetailsFarenheit.wind_mph = weatherData.current.wind_mph;
 
-    this.Weather.humidity = weatherData.current.humidity;
+    this.weatherDetailsFarenheit.humidity = weatherData.current.humidity;
+    this.weatherDetailsCelsius.humidity = weatherData.current.humidity;
 
     this.Weather.lastUpdated = weatherData.current.last_updated;
   }
@@ -149,5 +185,8 @@ const weatherManager = new WeatherManagment();
 
 // Searchbar Enter Eventlistener
 locationSearchBar.addEventListener("keypress", (e) => {
-  weatherManager.weatherSearchActivation(e);
+  if (e.key === "Enter") {
+    weatherManager.weatherSearchActivation(e.target.value);
+    e.target.value = "";
+  }
 });
