@@ -96,13 +96,127 @@ class RenderManagment {
     temperatureWindowImg.src = weather.conditionIcon;
     conditionText.innerText = weather.conditionText;
   }
+  renderHourlyWeather() {
+    console.log(weatherManager.weatherData);
+    const hourlyWeather =
+      weatherManager.weatherData.forecast.forecastday[0].hour;
+
+    // Create carouselContainer
+    const hourlyCarouselContainer = document.createElement("div");
+    hourlyCarouselContainer.classList.add("hourlyCarouselContainer");
+    DOMMainContainer.appendChild(hourlyCarouselContainer);
+
+    // Create title for the carousel
+    const carouselTitle = document.createElement("span");
+    carouselTitle.classList.add("carouselTitle");
+    carouselTitle.innerText = "Hourly";
+    hourlyCarouselContainer.appendChild(carouselTitle);
+
+    // Create the carousel that contains the hourly cards
+    const hourlyCarousel = document.createElement("div");
+    hourlyCarousel.classList.add("hourlyCarousel");
+    hourlyCarouselContainer.appendChild(hourlyCarousel);
+
+    hourlyWeather.forEach((hour) => {
+      // Create the card container
+      const hourlyDetailsCard = document.createElement("div");
+      hourlyDetailsCard.classList.add("hourlyDetailsCard");
+      hourlyCarousel.appendChild(hourlyDetailsCard);
+
+      // create card title (time)
+      const title = document.createElement("div");
+      title.classList.add("title");
+      title.innerText = new Date(hour.time).getHours() + ":00";
+      hourlyDetailsCard.appendChild(title);
+
+      // Check if this card is for the current hour
+      if (new Date().getHours() === new Date(hour.time).getHours()) {
+        hourlyDetailsCard.scrollIntoView({
+          inline: "end",
+          block: "start",
+          behavior: "smooth",
+        });
+      }
+
+      // create temperature div that includes weather icon and temp
+      const temperature = document.createElement("div");
+      temperature.classList.add("temperature");
+      hourlyDetailsCard.appendChild(temperature);
+
+      const detailsIcon = document.createElement("img");
+      detailsIcon.classList.add("detailsIcon");
+      detailsIcon.src = hour.condition.icon;
+      temperature.appendChild(detailsIcon);
+
+      const temperatureText = document.createElement("span");
+      temperatureText.classList.add("temperatureText");
+
+      // input metrics to temp and wind depending on settings to show Celsius or Fahrenheit
+      if (this.showInCelsius === true) {
+        temperatureText.innerText = hour.temp_c + "°C";
+      } else {
+        temperatureText.innerText = hour.temp_f + "°F";
+      }
+
+      temperature.appendChild(temperatureText);
+
+      // create container for weather details (wind, chance for rain)
+      const details = document.createElement("div");
+      details.classList.add("details");
+      hourlyDetailsCard.appendChild(details);
+
+      // create container for wind details (icon, text)
+      const wind = document.createElement("div");
+      wind.classList.add("wind");
+      details.appendChild(wind);
+
+      const windIcon = document.createElement("img");
+      windIcon.src = "/Icons/wind white.svg";
+      wind.appendChild(windIcon);
+
+      const windText = document.createElement("span");
+
+      // input metrics to temp and wind depending on settings to show Celsius or Fahrenheit
+      if (this.showInCelsius === true) {
+        windText.innerText = hour.wind_kph + " kph";
+      } else {
+        windText.innerText = hour.wind_mph + " mph";
+      }
+
+      wind.appendChild(windText);
+
+      // create container for rain/snow chance details (icon, text)
+      const rain = document.createElement("div");
+      rain.classList.add("rain");
+      details.appendChild(rain);
+
+      const rainIcon = document.createElement("img");
+
+      if (hour.chance_of_rain > hour.chance_of_snow) {
+        rainIcon.src = "/Icons/cloud-rain.svg";
+        rain.appendChild(rainIcon);
+
+        const rainText = document.createElement("span");
+        rainText.innerText = hour.chance_of_rain + "%";
+        rain.appendChild(rainText);
+      } else {
+        rainIcon.src = "/Icons/cloud-snow.svg";
+        rain.appendChild(rainIcon);
+
+        const rainText = document.createElement("span");
+        rainText.innerText = hour.chance_of_snow + "%";
+        rain.appendChild(rainText);
+      }
+    });
+  }
 
   // Render all weather information
   async renderWeatherData() {
-    // DOMMainContainer.innerHTML = "";
+    DOMMainContainer.innerHTML = "";
     this.renderLocationData();
     this.renderWeatherInfo();
     this.renderWeatherDetails();
+    this.renderHourlyWeather();
   }
 }
 const renderManager = new RenderManagment();
@@ -110,7 +224,8 @@ const renderManager = new RenderManagment();
 // Class that manages all of the weather functions
 class WeatherManagment {
   constructor() {
-    this.weatherData = this.updateWeatherData("helsinki");
+    this.weatherData = {};
+
     this.Weather = {
       location: "",
       country: "",
@@ -143,6 +258,8 @@ class WeatherManagment {
   }
 
   async updateWeatherData(searchLocation) {
+    this.weatherData = await this.fetchWeatherData(searchLocation);
+
     const weatherData = await this.fetchWeatherData(searchLocation);
 
     this.Weather.location = weatherData.location.name;
