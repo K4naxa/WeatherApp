@@ -208,7 +208,8 @@ body {
           & img {
             opacity: 60%;
           }
-          & span {
+          & .windUnitText {
+            opacity: 70%;
           }
         }
       }

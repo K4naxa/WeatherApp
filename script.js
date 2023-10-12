@@ -170,20 +170,20 @@ class RenderManagment {
       wind.classList.add("wind");
       details.appendChild(wind);
 
-      const windIcon = document.createElement("img");
-      windIcon.src = "/Icons/wind white.svg";
-      wind.appendChild(windIcon);
+      const windValue = document.createElement("span");
 
-      const windText = document.createElement("span");
-
-      // input metrics to temp and wind depending on settings to show Celsius or Fahrenheit
-      if (this.showInCelsius === true) {
-        windText.innerText = hour.wind_kph + " kph";
+      if (this.showInCelsius) {
+        windValue.innerText = hour.wind_kph;
       } else {
-        windText.innerText = hour.wind_mph + " mph";
+        windValue.innerText = hour.wind_mph;
       }
 
-      wind.appendChild(windText);
+      const windUnit = document.createElement("span");
+      windUnit.innerText = this.showInCelsius ? " kph" : " mph";
+      windUnit.classList.add("windUnitText");
+
+      wind.appendChild(windValue);
+      wind.appendChild(windUnit);
 
       // create container for rain/snow chance details (icon, text)
       const rain = document.createElement("div");
@@ -192,7 +192,10 @@ class RenderManagment {
 
       const rainIcon = document.createElement("img");
 
-      if (hour.chance_of_rain > hour.chance_of_snow) {
+      if (
+        hour.chance_of_rain > hour.chance_of_snow ||
+        hour.chance_of_snow === 0
+      ) {
         rainIcon.src = "/Icons/cloud-rain.svg";
         rain.appendChild(rainIcon);
 
