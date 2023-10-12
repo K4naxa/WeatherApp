@@ -170,8 +170,11 @@ class RenderManagment {
       wind.classList.add("wind");
       details.appendChild(wind);
 
-      const windValue = document.createElement("span");
+      const windIcon = document.createElement("img");
+      windIcon.src = "/Icons/wind white.svg";
+      wind.appendChild(windIcon);
 
+      const windValue = document.createElement("span");
       if (this.showInCelsius) {
         windValue.innerText = hour.wind_kph;
       } else {
