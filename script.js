@@ -9,6 +9,15 @@ class RenderManagment {
   constructor() {
     this.showInCelsius = true;
   }
+  renderActiveSetting() {
+    if (this.showInCelsius) {
+      celsiusButton.classList.add("activeSetting");
+      farenheitBtn.classList.remove("activeSetting");
+    } else {
+      celsiusButton.classList.remove("activeSetting");
+      farenheitBtn.classList.add("activeSetting");
+    }
+  }
   renderLocationData() {
     const weather = weatherManager.Weather;
 
@@ -456,6 +465,7 @@ class RenderManagment {
     this.renderWeatherDetails();
     this.renderHourlyWeather();
     this.renderDailyForecast();
+    this.renderActiveSetting();
   }
 }
 const renderManager = new RenderManagment();
@@ -550,5 +560,13 @@ locationSearchBar.addEventListener("keypress", (e) => {
   }
 });
 
-// RUN ON STARTUP
-weatherManager.weatherSearchActivation("Helsinki");
+farenheitBtn.addEventListener("click", () => {
+  renderManager.showInCelsius = false;
+  renderManager.renderWeatherData();
+});
+celsiusButton.addEventListener("click", () => {
+  renderManager.showInCelsius = true;
+  renderManager.renderWeatherData();
+});
+
+weatherManager.weatherSearchActivation("tampere");

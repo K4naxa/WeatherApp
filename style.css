@@ -61,11 +61,18 @@ body {
 
   & div {
     background-color: #0e2d44;
-    padding: 0.3rem;
+    padding: 0.5rem;
     border-radius: 20px;
     border: 2px solid #0e2d44;
 
+    display: flex;
+    align-items: center;
+
     font-size: 0.8rem;
+
+    &.activeSetting {
+      border: 2px solid white;
+    }
 
     &:hover {
       cursor: pointer;
@@ -142,6 +149,8 @@ body {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
   font-size: 1.4rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 
   align-self: center;
   justify-self: center;
