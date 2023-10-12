@@ -168,6 +168,9 @@ body {
   justify-self: center;
   width: 100%;
 
+  margin-left: 1rem;
+  margin-right: 1rem;
+
   & .carouselTitle {
     align-self: center;
     font-size: 1.6rem;
@@ -178,7 +181,7 @@ body {
     overflow-x: scroll;
     gap: 2rem;
     align-self: center;
-    width: 100%;
+    width: 95%;
     padding-bottom: 1rem;
 
     & .hourlyDetailsCard {
@@ -355,8 +358,9 @@ body {
 }
 
 @media (max-width: 620px) {
-  .dailyforecast {
+  #mainContainer .dailyContainer .dailyForecast {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto;
+    justify-items: center;
   }
 }
