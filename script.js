@@ -28,36 +28,117 @@ class RenderManagment {
     locationInfoContainer.appendChild(informationUpdateTime);
   }
   renderWeatherDetails() {
-    let weatherDetails;
+    console.log(weatherManager.weatherData);
+    let weatherDetails = weatherManager.weatherData.current;
+    let astroDetails = weatherManager.weatherData.forecast.forecastday[0].astro;
 
-    // Checks wether we show in celcius or farenheit
-    if (this.showInCelsius === true) {
-      weatherDetails = weatherManager.weatherDetailsCelsius;
-    } else {
-      weatherDetails = weatherManager.weatherDetailsFarenheit;
-    }
-
+    // creates the grid where all details go
     const weatherDetailsGrid = document.createElement("div");
     weatherDetailsGrid.classList.add("weatherDetails");
     DOMMainContainer.appendChild(weatherDetailsGrid);
 
-    // iterates through every value in weatherDetails and creates a div for it
-    for (const [key, value] of Object.entries(weatherDetails)) {
-      const detailsDiv = document.createElement("div");
-      detailsDiv.classList.add("details");
-
-      const detailsTitle = document.createElement("div");
-      detailsTitle.classList.add("detailsTitle");
-      detailsTitle.innerText = key;
-
-      const detailsData = document.createElement("div");
-      detailsData.classList.add("detailsData");
-      detailsData.innerText = value;
-
-      weatherDetailsGrid.appendChild(detailsDiv);
-      detailsDiv.appendChild(detailsTitle);
-      detailsDiv.appendChild(detailsData);
+    // detail container for winddetails (title, direction, speed)
+    const windDetails = document.createElement("div");
+    windDetails.classList.add("details");
+    weatherDetailsGrid.appendChild(windDetails);
+    // title
+    const windTitle = document.createElement("div");
+    windTitle.classList.add("detailsTitle");
+    windTitle.innerText = "Wind";
+    windDetails.appendChild(windTitle);
+    // container for data
+    const windData = document.createElement("div");
+    windData.classList.add("windData");
+    windDetails.appendChild(windData);
+    //direction
+    const windDirection = document.createElement("img");
+    windDirection.src = "/Icons/arrow-up.svg";
+    windDirection.style.transform = `rotate(${weatherDetails.wind_degree}deg)`;
+    windDirection.classList.add("windDirection");
+    windData.appendChild(windDirection);
+    //speed
+    const windSpeed = document.createElement("span");
+    windSpeed.classList.add("windSpeed");
+    if (this.showInCelsius) {
+      windSpeed.innerText = weatherDetails.wind_kph + " Km/h";
+    } else {
+      windSpeed.innerText = weatherDetails.wind_mph + "mph";
     }
+    windData.appendChild(windSpeed);
+
+    // container for humidity details
+    const humidity = document.createElement("grid");
+    humidity.classList.add("details");
+    weatherDetailsGrid.appendChild(humidity);
+    // title
+    const humidityTitle = document.createElement("div");
+    humidityTitle.classList.add("detailsTitle");
+    humidityTitle.innerText = "Humidity";
+    humidity.appendChild(humidityTitle);
+    // value
+    const humidityValue = document.createElement("span");
+    humidityValue.innerText = weatherDetails.humidity + "%";
+    humidity.appendChild(humidityValue);
+
+    // container for visibility details
+    const visibility = document.createElement("grid");
+    visibility.classList.add("details");
+    weatherDetailsGrid.appendChild(visibility);
+    // title
+    const visibilityTitle = document.createElement("div");
+    visibilityTitle.classList.add("detailsTitle");
+    visibilityTitle.innerText = "Visibility";
+    visibility.appendChild(visibilityTitle);
+    // value  km / miles
+    const visibilityValue = document.createElement("span");
+    if (this.showInCelsius) {
+      visibilityValue.innerText = weatherDetails.vis_km + "km";
+    } else {
+      visibilityValue.innerText = weatherDetails.vis_miles + "miles";
+    }
+    visibility.appendChild(visibilityValue);
+
+    //container for uv details
+    const UV = document.createElement("div");
+    UV.classList.add("details");
+    weatherDetailsGrid.appendChild(UV);
+    //title
+    const UVTitle = document.createElement("div");
+    UVTitle.classList.add("detailsTitle");
+    UVTitle.innerText = "UV";
+    UV.appendChild(UVTitle);
+    //value
+    const UVValue = document.createElement("span");
+    UVValue.innerText = weatherDetails.uv;
+    UV.appendChild(UVValue);
+
+    const sunrise = document.createElement("div");
+    sunrise.classList.add("details");
+    weatherDetailsGrid.appendChild(sunrise);
+    // sunsrise icon
+    const sunriseIcon = document.createElement("img");
+    sunriseIcon.classList.add("detailsTitle");
+    sunriseIcon.src = "/Icons/sunrise.svg";
+    sunrise.appendChild(sunriseIcon);
+    //sunrise value
+    const sunriseTime = document.createElement("span");
+    sunriseTime.innerText = astroDetails.sunrise;
+    sunrise.appendChild(sunriseTime);
+
+    // container for sunset icon and value
+    const sunset = document.createElement("div");
+    sunset.classList.add("details");
+    weatherDetailsGrid.appendChild(sunset);
+    // sunset icon
+    const sunsetIcon = document.createElement("img");
+    sunsetIcon.classList.add("detailsTitle");
+    sunsetIcon.src = "/Icons/sunset.svg";
+    sunset.appendChild(sunsetIcon);
+    // sunset time
+    const sunsetTime = document.createElement("span");
+
+    sunsetTime.innerText = astroDetails.sunset;
+    sunset.appendChild(sunsetTime);
   }
   renderWeatherInfo() {
     const weather = weatherManager.Weather;

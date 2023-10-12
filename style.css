@@ -147,14 +147,23 @@ body {
   justify-self: center;
 
   & .details {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
 
     & .detailsTitle {
       opacity: 70%;
       margin-bottom: 0.4rem;
     }
-    & .details-data {
-      font-size: 1.2rem;
+    & span {
+      align-self: center;
+      justify-self: center;
+    }
+
+    & .windData {
+      display: flex;
+      gap: 1rem;
     }
   }
 }
