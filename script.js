@@ -97,7 +97,6 @@ class RenderManagment {
     conditionText.innerText = weather.conditionText;
   }
   renderHourlyWeather() {
-    console.log(weatherManager.weatherData);
     const hourlyWeather =
       weatherManager.weatherData.forecast.forecastday[0].hour;
 
@@ -215,14 +214,167 @@ class RenderManagment {
       }
     });
   }
+  renderDailyForecast() {
+    const dailyForecast = weatherManager.weatherData.forecast.forecastday;
+
+    // Weekdays for the dayTxt info
+    const weekday = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    //Create container for dailyforecasts
+    const dailyContainer = document.createElement("div");
+    dailyContainer.classList.add("dailyContainer");
+    DOMMainContainer.appendChild(dailyContainer);
+
+    //Create title for the dailyforectsts container
+    const dailyContainerTitle = document.createElement("div");
+    dailyContainerTitle.classList.add("title");
+    dailyContainerTitle.innerText = "Daily";
+    dailyContainer.appendChild(dailyContainerTitle);
+
+    // Loop through the daily forecasts from api and create a card each of them
+    dailyForecast.forEach((day) => {
+      // card that includes the forecast information
+      const dailyCard = document.createElement("div");
+      dailyCard.classList.add("dailyForecast");
+      dailyContainer.appendChild(dailyCard);
+
+      //Container for Date info (text, numeral)
+      const date = document.createElement("div");
+      date.classList.add("date");
+      dailyCard.appendChild(date);
+
+      // date text
+      const dateText = document.createElement("div");
+      dateText.classList.add("dateText");
+      dateText.innerText = weekday[new Date(day.date).getDay()];
+      date.appendChild(dateText);
+
+      // date numeral
+      const dateNumbers = document.createElement("div");
+      dateNumbers.classList.add("dateNumbers");
+      dateNumbers.innerText = day.date;
+      date.appendChild(dateNumbers);
+
+      //condition icon
+      const conditionIcon = document.createElement("div");
+      conditionIcon.classList.add("conditionIcon");
+      dailyCard.appendChild(conditionIcon);
+
+      const conditionIconImage = document.createElement("img");
+      conditionIconImage.src = day.day.condition.icon;
+      conditionIcon.appendChild(conditionIconImage);
+
+      // container for tempereature icon and numeral value
+      const temperature = document.createElement("div");
+      temperature.classList.add("temperature");
+      dailyCard.appendChild(temperature);
+
+      const temperatureIcon = document.createElement("img");
+      temperatureIcon.src = "/Icons/thermometer.svg";
+      temperature.appendChild(temperatureIcon);
+
+      // container for max and min temperatures
+      const temperatureValues = document.createElement("div");
+      temperatureValues.classList.add("temperatureValues");
+      temperature.appendChild(temperatureValues);
+
+      // max temp value
+      const maxTemperature = document.createElement("span");
+      maxTemperature.classList.add("maxTemperature");
+
+      if (this.showInCelsius) {
+        maxTemperature.innerText = day.day.maxtemp_c + "°C";
+      } else {
+        maxTemperature.innerText = day.day.maxtemp_f + "°F";
+      }
+      temperatureValues.appendChild(maxTemperature);
+
+      // min temp value
+      const minTemperature = document.createElement("span");
+      minTemperature.classList.add("minTemperature");
+
+      if (this.showInCelsius) {
+        minTemperature.innerText = day.day.mintemp_c + "°C";
+      } else {
+        minTemperature.innerText = day.day.mintemp_f + "°F";
+      }
+      temperatureValues.appendChild(minTemperature);
+
+      // container for chace of rain icon and value
+      const chanceOfRain = document.createElement("div");
+      chanceOfRain.classList.add("chaceOfRain");
+      dailyCard.appendChild(chanceOfRain);
+
+      // deciding if showing chance for rain or for snow
+      if (
+        day.day.daily_chance_of_rain > day.day.daily_chance_of_snow ||
+        day.day.daily_chance_of_snow === 0
+      ) {
+        const chanceOfRainIcon = document.createElement("img");
+        chanceOfRainIcon.src = "/Icons/cloud-rain.svg";
+        chanceOfRain.appendChild(chanceOfRainIcon);
+
+        const chanceOfRainValue = document.createElement("span");
+        chanceOfRainValue.innerText = day.day.daily_chance_of_rain;
+        chanceOfRain.appendChild(chanceOfRainValue);
+      } else {
+        const chanceOfRainIcon = document.createElement("img");
+        chanceOfRainIcon.src = "/Icons/cloud-snow.svg";
+        chanceOfRain.appendChild(chanceOfRainIcon);
+
+        const chanceOfRainValue = document.createElement("span");
+        chanceOfRainValue.innerText = day.day.daily_chance_of_snow;
+        chanceOfRain.appendChild(chanceOfRainValue);
+      }
+
+      // container for sunrise icon and value
+      const sunrise = document.createElement("div");
+      sunrise.classList.add("sunrise");
+      dailyCard.appendChild(sunrise);
+      // sunsrise icon
+      const sunriseIcon = document.createElement("img");
+      sunriseIcon.classList.add("sunriseIcon");
+      sunriseIcon.src = "/Icons/sunrise.svg";
+      sunrise.appendChild(sunriseIcon);
+      //sunrise value
+      const sunriseTime = document.createElement("span");
+      sunriseTime.classList.add("sunriseTime");
+      sunriseTime.innerText = day.astro.sunrise;
+      sunrise.appendChild(sunriseTime);
+
+      // container for sunset icon and value
+      const sunset = document.createElement("div");
+      sunset.classList.add("sunset");
+      dailyCard.appendChild(sunset);
+      // sunset icon
+      const sunsetIcon = document.createElement("img");
+      sunsetIcon.classList.add("sunsetIcon");
+      sunsetIcon.src = "/Icons/sunset.svg";
+      sunset.appendChild(sunsetIcon);
+      // sunset time
+      const sunsetTime = document.createElement("span");
+      sunsetTime.classList.add("sunsetTime");
+      sunsetTime.innerText = day.astro.sunset;
+      sunset.appendChild(sunsetTime);
+    });
+  }
 
   // Render all weather information
   async renderWeatherData() {
-    // DOMMainContainer.innerHTML = "";
+    DOMMainContainer.innerHTML = "";
     this.renderLocationData();
     this.renderWeatherInfo();
     this.renderWeatherDetails();
     this.renderHourlyWeather();
+    this.renderDailyForecast();
   }
 }
 const renderManager = new RenderManagment();
@@ -298,7 +450,7 @@ class WeatherManagment {
   async fetchWeatherData(input) {
     let solution = await fetch(
       //   `http://api.weatherapi.com/v1/current.json?key=7d6ccec9f9824320846142016230910&q=${input}&aqi=no`,
-      `http://api.weatherapi.com/v1/forecast.json?key=7d6ccec9f9824320846142016230910&q=${input}&days=7&aqi=no&alerts=no`,
+      `http://api.weatherapi.com/v1/forecast.json?key=7d6ccec9f9824320846142016230910&q=${input}&days=3&aqi=no&alerts=no`,
       { mode: "cors" }
     ).catch((message) => {
       console.error(message);

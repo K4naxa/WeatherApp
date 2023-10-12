@@ -141,6 +141,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
+  font-size: 1.4rem;
 
   align-self: center;
   justify-self: center;
@@ -295,6 +296,18 @@ body {
         font-weight: 600;
       }
     }
+
+    & .temperatureValues {
+      display: flex;
+      flex-direction: column;
+
+      & .minTemperature {
+        color: aqua;
+      }
+      & .maxTemperature {
+        color: rgb(255, 136, 0);
+      }
+    }
   }
 }
 
@@ -316,7 +329,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   #mainContainer {
     width: 100%;
     grid-template-columns: 100%;
@@ -338,5 +351,12 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .dailyforecast {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
   }
 }
