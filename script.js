@@ -218,7 +218,7 @@ class RenderManagment {
 
   // Render all weather information
   async renderWeatherData() {
-    DOMMainContainer.innerHTML = "";
+    // DOMMainContainer.innerHTML = "";
     this.renderLocationData();
     this.renderWeatherInfo();
     this.renderWeatherDetails();

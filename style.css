@@ -1,8 +1,9 @@
 html {
-  height: 100vh;
+  height: 100%;
   padding: 0;
   margin: 0;
   background: linear-gradient(rgb(28, 98, 202), rgb(0, 119, 119));
+  background-attachment: fixed;
   font-family: Arial, Helvetica, sans-serif;
   color: white;
 }
@@ -253,6 +254,47 @@ body {
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+}
+
+.dailyContainer {
+  grid-area: daily;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  margin: 1rem;
+
+  & .title {
+    align-self: center;
+    font-size: 1.6rem;
+  }
+
+  & .dailyForecast {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    border-bottom: #c5dbec59 2px solid;
+    border-radius: 1px;
+
+    & div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    & .date {
+      flex-direction: column;
+      gap: 5px;
+      align-items: start;
+
+      & .dateText {
+        font-weight: 600;
+      }
+    }
   }
 }
 
